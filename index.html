@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leave My Internet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080a0f;
+    --bg2: #0d1117;
+    --bg3: #111820;
+    --accent: #00ff88;
+    --accent2: #ff3c3c;
+    --accent3: #00cfff;
+    --text: #e8edf5;
+    --muted: #6b7a8d;
+    --border: rgba(255,255,255,0.07);
+    --glow: 0 0 30px rgba(0,255,136,0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    background: rgba(8,10,15,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+    list-style: none;
+    flex-wrap: wrap;
+  }
+
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.78rem;
+    font-family: 'Space Mono', monospace;
+    padding: 0.4rem 0.7rem;
+    border-radius: 4px;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .nav-links a:hover { color: var(--accent); background: rgba(0,255,136,0.07); }
+
+  .github-link {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--text) !important;
+    background: rgba(255,255,255,0.06) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 6px !important;
+    padding: 0.4rem 0.8rem !important;
+    font-size: 0.78rem !important;
+    transition: all 0.2s !important;
+    white-space: nowrap;
+  }
+
+  .github-link:hover {
+    background: rgba(255,255,255,0.12) !important;
+    color: var(--text) !important;
+    border-color: rgba(255,255,255,0.2) !important;
+  }
+
+  .github-link svg { flex-shrink: 0; }
+
+  /* ── HAMBURGER ── */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+  }
+
+  .hamburger span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: var(--text);
+    border-radius: 2px;
+    transition: all 0.3s;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 6rem 2rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,255,136,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,255,136,0.04) 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: gridPulse 4s ease-in-out infinite;
+  }
+
+  @keyframes gridPulse {
+    0%,100% { opacity: 0.5; }
+    50% { opacity: 1; }
+  }
+
+  .hero-glow {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(0,255,136,0.08) 0%, transparent 70%);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    animation: glowPulse 3s ease-in-out infinite;
+  }
+
+  @keyframes glowPulse {
+    0%,100% { transform: translate(-50%,-50%) scale(1); opacity: 0.8; }
+    50% { transform: translate(-50%,-50%) scale(1.1); opacity: 1; }
+  }
+
+  .hero-content { position: relative; z-index: 1; max-width: 800px; }
+
+  .hero-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--accent);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(2.8rem, 8vw, 6rem);
+    line-height: 1;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.4s forwards;
+  }
+
+  .hero h1 span { color: var(--accent); }
+
+  .hero-sub {
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 600px;
+    margin: 0 auto 2.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.6s forwards;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.8s forwards;
+  }
+
+  .btn {
+    padding: 0.75rem 1.75rem;
+    border-radius: 6px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+    display: inline-block;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #000;
+    border: none;
+    font-weight: 700;
+  }
+
+  .btn-primary:hover { background: #00e87a; transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,255,136,0.3); }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── SECTIONS ── */
+  section {
+    position: relative;
+    z-index: 1;
+    padding: 6rem 2rem;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  .section-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--accent);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .section-tag::before {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  h2 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(1.8rem, 5vw, 3rem);
+    line-height: 1.1;
+    margin-bottom: 2.5rem;
+  }
+
+  h2 span { color: var(--accent); }
+
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 0;
+  }
+
+  /* ── ARTICLE TEXT ── */
+  .article {
+    font-size: 1.05rem;
+    line-height: 1.85;
+    color: #c5cdd8;
+  }
+
+  .article p { margin-bottom: 1.4rem; }
+
+  .article strong, .article b {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .article .highlight {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .article .danger { color: var(--accent2); font-weight: 600; }
+
+  .callout {
+    border-left: 3px solid var(--accent);
+    background: rgba(0,255,136,0.04);
+    padding: 1.25rem 1.5rem;
+    margin: 2rem 0;
+    border-radius: 0 8px 8px 0;
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+  .callout-danger {
+    border-left-color: var(--accent2);
+    background: rgba(255,60,60,0.05);
+  }
+
+  .callout-blue {
+    border-left-color: var(--accent3);
+    background: rgba(0,207,255,0.04);
+  }
+
+  /* ── CARD GRID ── */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin: 2rem 0;
+  }
+
+  .card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.5rem;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .card:hover { border-color: rgba(0,255,136,0.2); transform: translateY(-3px); box-shadow: 0 12px 30px rgba(0,0,0,0.3); }
+  .card:hover::before { opacity: 1; }
+
+  .card-icon { font-size: 1.5rem; margin-bottom: 0.75rem; }
+  .card-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; margin-bottom: 0.5rem; color: var(--text); }
+  .card-text { font-size: 0.88rem; color: var(--muted); line-height: 1.6; }
+
+  /* ── TOOL CARDS ── */
+  .tool-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    transition: all 0.3s;
+  }
+
+  .tool-card:hover { border-color: rgba(0,255,136,0.2); }
+
+  .tool-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .tool-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(0,255,136,0.1);
+    border: 1px solid rgba(0,255,136,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .tool-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; }
+  .tool-badge {
+    margin-left: auto;
+    font-size: 0.65rem;
+    font-family: 'Space Mono', monospace;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    background: rgba(0,255,136,0.1);
+    color: var(--accent);
+    border: 1px solid rgba(0,255,136,0.2);
+    white-space: nowrap;
+  }
+
+  .tool-desc { font-size: 0.88rem; color: var(--muted); line-height: 1.65; }
+  .tool-desc strong { color: var(--text); }
+
+  /* ── VIDEO CONTAINER ── */
+  .video-wrap {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    margin: 1.5rem 0;
+    background: #000;
+  }
+
+  .video-wrap iframe {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    border: none;
+  }
+
+  .video-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .video-label::before {
+    content: '▶';
+    color: var(--accent2);
+    font-size: 0.6rem;
+  }
+
+  /* ── WARNING BOX ── */
+  .warning-box {
+    background: rgba(255,60,60,0.06);
+    border: 1px solid rgba(255,60,60,0.25);
+    border-radius: 10px;
+    padding: 1.5rem 1.75rem;
+    margin: 2rem 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .warning-box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--accent2);
+  }
+
+  .warning-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: var(--accent2);
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  /* ── OS CHIPS ── */
+  .os-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+
+  .os-chip {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.1rem 1.25rem;
+    transition: all 0.3s;
+    cursor: default;
+  }
+
+  .os-chip:hover { border-color: rgba(0,207,255,0.3); transform: translateY(-2px); }
+  .os-chip-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem; margin-bottom: 0.25rem; }
+  .os-chip-desc { font-size: 0.8rem; color: var(--muted); }
+  .os-chip.featured { border-color: rgba(0,255,136,0.3); background: rgba(0,255,136,0.03); }
+  .os-chip.featured .os-chip-name { color: var(--accent); }
+
+  /* ── STAT ROW ── */
+  .stat-row {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+  }
+
+  .stat-item { flex: 1; min-width: 120px; }
+  .stat-num { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; color: var(--accent); }
+  .stat-label { font-size: 0.8rem; color: var(--muted); margin-top: 0.2rem; }
+
+  /* ── SCROLL REVEAL ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.7s, transform 0.7s;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* ── SECTION BACKGROUNDS ── */
+  .section-dark {
+    background: var(--bg2);
+    max-width: 100%;
+    padding: 6rem 2rem;
+  }
+
+  .section-dark > .inner {
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 4rem 2rem 3rem;
+    border-top: 1px solid var(--border);
+    position: relative;
+    z-index: 1;
+  }
+
+  .footer-brand {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 2rem;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.02em;
+  }
+
+  .footer-meta {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+
+  .footer-meta a { color: var(--muted); text-decoration: none; }
+  .footer-meta a:hover { color: var(--accent); }
+
+  /* ── MOBILE ── */
+  @media (max-width: 768px) {
+    .hamburger { display: flex; }
+
+    .nav-links {
+      display: none;
+      position: fixed;
+      top: 60px; left: 0; right: 0;
+      background: rgba(8,10,15,0.97);
+      backdrop-filter: blur(20px);
+      flex-direction: column;
+      padding: 1.5rem;
+      gap: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-links.open { display: flex; }
+    .nav-links a { padding: 0.75rem 1rem; font-size: 0.9rem; }
+
+    section { padding: 4rem 1.25rem; }
+    .section-dark { padding: 4rem 1.25rem; }
+    .stat-row { gap: 1.25rem; }
+    .card-grid { grid-template-columns: 1fr; }
+    .os-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media (max-width: 480px) {
+    .os-grid { grid-template-columns: 1fr; }
+    nav { padding: 0 1rem; }
+  }
+
+  /* ── ANIMATED LINES ── */
+  .scan-line {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    opacity: 0.3;
+    animation: scan 8s linear infinite;
+    z-index: 999;
+    pointer-events: none;
+  }
+
+  @keyframes scan {
+    0% { top: 0; opacity: 0; }
+    5% { opacity: 0.3; }
+    95% { opacity: 0.3; }
+    100% { top: 100vh; opacity: 0; }
+  }
+
+  /* ── INLINE CODE ── */
+  code {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85em;
+    background: rgba(0,255,136,0.08);
+    color: var(--accent);
+    padding: 0.15em 0.4em;
+    border-radius: 3px;
+  }
+
+  /* ── BIG SUBTITLE ── */
+  .big-sub {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.2rem, 3vw, 1.6rem);
+    color: var(--text);
+    margin: 2.5rem 0 1rem;
+  }
+
+  .medium-sub {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--accent3);
+    margin: 2rem 0 0.75rem;
+  }
+</style>
+</head>
+<body>
+
+<div class="scan-line"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">LEAVE MY INTERNET</a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#free-internet">Free Internet</a></li>
+    <li><a href="#os">Operating Systems</a></li>
+    <li><a href="#phones">Phones</a></li>
+    <li><a href="#companies">Companies</a></li>
+    <li>
+      <a href="https://github.com/tc4dy" target="_blank" rel="noopener" class="github-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+        tc4dy
+      </a>
+    </li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">// digital rights · privacy · freedom</p>
+    <h1>The Internet<br>Belongs To <span>You.</span></h1>
+    <p class="hero-sub">They're watching. They're collecting. They're selling. Every click, every search, every message — recorded, analyzed, and monetized. It's time to take back what was always yours.</p>
+    <div class="hero-cta">
+      <a href="#free-internet" class="btn btn-primary">Start Reading</a>
+      <a href="#companies" class="btn btn-secondary">See The Threat</a>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 1 — FREE INTERNET
+     ═══════════════════════════════════════════ -->
+<section id="free-internet" class="reveal">
+  <p class="section-tag">01 — The Problem</p>
+  <h2>Free <span>Internet</span></h2>
+
+  <div class="article">
+    <p>The internet was born as the greatest equalizer in human history — a boundless, decentralized network where every voice carried equal weight, where knowledge flowed freely across borders, and where the individual could reach the world without asking anyone for permission. That vision is <strong>dying.</strong> And it is dying quietly, systematically, and with the full cooperation of governments, corporations, and platforms we once trusted.</p>
+
+    <div class="callout">
+      <strong>Every year, the list of blocked websites grows longer.</strong> Every year, new laws are passed — not to protect citizens, but to protect power. Internet censorship is no longer a problem exclusive to authoritarian regimes. It is creeping into every corner of the world, including yours.
+    </div>
+
+    <p>You wake up and reach for your phone. Before you've had a single thought, <strong>fourteen different companies</strong> have already logged your location, your device ID, your network, the time you woke up, and what app you opened first. You haven't done anything wrong. You haven't agreed to anything meaningful. But your morning has already been packaged, priced, and sold.</p>
+
+    <p>This is the modern internet. Not a tool for liberation — but a <span class="danger">surveillance apparatus</span> masquerading as a convenience. The apps are free because <em>you</em> are the product. The platforms are engaging because engagement is addiction by design. The algorithms know you better than you know yourself — and they use that knowledge not for your benefit, but for theirs.</p>
+
+    <div class="stat-row">
+      <div class="stat-item">
+        <div class="stat-num">4.8B+</div>
+        <div class="stat-label">Social media users globally tracked daily</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">72+</div>
+        <div class="stat-label">Countries with active internet censorship</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">$600B</div>
+        <div class="stat-label">Global surveillance industry annual value</div>
+      </div>
+    </div>
+
+    <p><strong>Big Data is not a buzzword.</strong> It is the engine of modern control. Every search query, every purchase, every like, every hesitation before you type something and then delete it — all of it is captured. Machine learning systems process billions of these data points per second, constructing psychological profiles of unimaginable precision. These profiles determine what news you see, what prices you're shown, whether you get a loan, whether your insurance is affordable, whether you get that job interview.</p>
+
+    <p>And then there is the concept that science fiction writers warned us about for decades: <span class="highlight">autonomous, interconnected intelligence systems</span> — what we once called Skynet in jest. Today's reality is more mundane but no less terrifying. AI systems trained on your data make decisions about your life without transparency, without accountability, and without your consent. The model that decides your credit score was trained on the data of millions of people who never agreed to be training data. <strong>You are feeding the machine that controls you.</strong></p>
+
+    <div class="callout-danger callout">
+      <strong>⚠ The threat isn't in the future. It's happening right now.</strong> Real-time facial recognition in public spaces. Predictive policing algorithms that profile people before they commit any crime. Social credit systems. Content moderation AI that silences dissent. Mass data retention laws that force ISPs to store your browsing history for years. The infrastructure of digital totalitarianism is already built.
+    </div>
+
+    <p>Social media is perhaps the most insidious part of this machine. Platforms like Instagram, TikTok, Twitter/X, and Facebook were not designed to connect people — they were designed to <strong>maximize engagement</strong>. Engagement means time on platform. Time on platform means more data. More data means more targeted advertising. The easiest way to maximize engagement is to trigger emotion — especially outrage, fear, and anxiety. You are not using social media. Social media is using you.</p>
+
+    <p>None of this means you must disappear from the internet. But it means you must <span class="highlight">use it with intention and knowledge.</span> Understand what you're giving away when you use a free service. Understand that your data is not just harmless metadata — it is a detailed map of your thoughts, beliefs, relationships, vulnerabilities, and desires.</p>
+
+    <div class="callout callout-blue">
+      <strong>Why Open Source Software Matters More Than Ever</strong><br><br>
+      When the source code of software is open and publicly auditable, <strong>anyone can verify what it actually does.</strong> There are no hidden tracking modules, no secret data collection, no backdoors installed at government request. With proprietary software, you are asked to trust blindly. With open source, trust is replaced by <em>verifiable fact.</em><br><br>
+      Open source isn't just a technical preference — it is a <strong>political act.</strong> It is the refusal to cede control over the tools you use to live your life. Every time you choose an open source alternative, you vote with your choices for a world where technology serves people, not corporations.
+    </div>
+
+    <p>Use open source browsers. Use open source operating systems. Use open source communication tools. Audit the software you rely on. Support the developers who build tools for freedom rather than profit. The alternative — continuing to hand every aspect of your digital life to corporations whose entire business model depends on knowing everything about you — is not neutrality. <strong>It is complicity.</strong></p>
+
+    <p>The internet is worth fighting for. Not the internet of today — walled gardens, algorithmic feeds, and surveillance capitalism — but the internet that was promised: open, decentralized, and free. That internet still exists. But you have to choose it, actively, every single day.</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 2 — OPERATING SYSTEMS
+     ═══════════════════════════════════════════ -->
+<div class="section-dark" id="os">
+  <div class="inner reveal">
+    <p class="section-tag">02 — Your Machine</p>
+    <h2>Operating <span>Systems</span></h2>
+
+    <div class="article">
+      <p>Your operating system is not just software. It is the foundation on which your entire digital life is built — every file you create, every password you type, every private conversation you have passes through it. And if that foundation is rotten with surveillance code, <strong>nothing above it is safe.</strong></p>
+
+      <p>Windows, the operating system running on approximately 73% of the world's computers, is — from a privacy standpoint — a <span class="danger">catastrophically hostile environment.</span> This is not speculation. This is documented, verifiable, and in many cases, legally mandated by Microsoft's own terms of service, which you clicked through without reading.</p>
+
+      <div class="callout callout-danger">
+        <strong>What Windows Actually Does Without Your Meaningful Consent:</strong><br><br>
+        <strong>Telemetry at every level.</strong> Windows constantly phones home to Microsoft servers — sending diagnostic data, usage statistics, error reports, and behavioral analytics. Even on "Basic" telemetry settings (which is the minimum allowed, not zero), enormous amounts of data are transmitted. There is no way to set Windows telemetry to truly zero through normal settings.<br><br>
+        <strong>Your keystrokes.</strong> Windows has had a built-in keylogger since Windows 10. Officially it's for "improving typing and handwriting." In practice, it is exactly what it sounds like. It can be disabled — but it is <em>on by default.</em><br><br>
+        <strong>Cortana and search indexing.</strong> Every file name on your computer, every search query you type into the start menu — indexed, analyzed, and in certain configurations, sent off-device.<br><br>
+        <strong>Advertising ID.</strong> Windows assigns every user a unique advertising identifier that tracks behavior across apps and serves targeted ads. Inside your operating system. On a product you paid for.<br><br>
+        <strong>OneDrive forced integration.</strong> Files silently synced to Microsoft's cloud. Your documents living on their servers. Your data subject to their privacy policy, their security breaches, and legal orders from any jurisdiction they operate in.<br><br>
+        <strong>Windows Update as a backdoor.</strong> Microsoft can push silent updates at any time, modifying system behavior without user approval or transparency. Your computer is not entirely yours.
+      </div>
+
+      <p>macOS is often presented as the privacy-conscious alternative to Windows. It is not. Apple collects detailed telemetry about how you use your Mac, which apps you open, how long you use them, and what you search for. Siri listens. iCloud stores. The App Store gatekeeps. Apple's security model is genuinely good — but security and privacy are not the same thing. Apple's entire services business is built on knowing its users deeply. <strong>The cage is prettier, but it is still a cage.</strong></p>
+
+      <div class="callout">
+        <strong>Linux is not just for programmers.</strong> The era of Linux being an impenetrable fortress of command lines and arcane configurations is long over. Modern distributions like Ubuntu, Fedora, Pop!_OS, Mint, and Manjaro offer complete desktop experiences that most users can adapt to within days. The tradeoff — giving up some gaming titles or niche software — is real. But so is the freedom you gain.
+      </div>
+
+      <p>On Linux, <strong>you own your machine.</strong> The kernel is publicly audited. The distribution packages are maintained by communities accountable to their users. There are no advertising IDs. There is no mandatory telemetry. There is no Cortana, no Siri quietly indexing your documents, no silent syncing of your files to a corporate cloud. When you install a program, you can read its source code. When something runs on your machine, <em>you can verify what it's doing.</em></p>
+
+      <p>How do you make the switch? The process has become remarkably accessible. Download a Linux distribution as an ISO file, write it to a USB drive using a tool like <strong>Rufus</strong> (Windows), <strong>Ventoy</strong> (multi-boot USB), or <strong>Balena Etcher</strong>. On mobile, <strong>EtchDroid</strong> lets you create bootable drives directly from your Android phone. Boot from the USB, follow the installer — most modern distros guide you through the process with clear graphical interfaces.</p>
+
+      <div class="video-label">Beginner's Guide — How to Install Linux (English)</div>
+      <div class="video-wrap">
+        <iframe src="https://www.youtube.com/embed/_BoqSxHTTNs" title="How to Install Linux in 2024 - A Beginners Guide" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe>
+      </div>
+
+      <div class="video-label">Linux Kurulum Rehberi — Sıfırdan Adım Adım (Türkçe)</div>
+      <div class="video-wrap">
+        <iframe src="https://www.youtube.com/embed/dtNtOB-eEhw" title="Linuxa Geçme Rehberi - Sıfırdan Adım Adım Linux Kurulumu" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe>
+      </div>
+
+      <div class="big-sub">If You Must Use Windows</div>
+
+      <p>We understand that switching isn't always immediately possible. Work requirements, specific software, hardware compatibility — real constraints exist. But if you're going to use Windows, you should at minimum <strong>dramatically reduce its surveillance footprint.</strong> The following tools are trusted, open source, and widely used by the privacy community:</p>
+
+      <div class="tool-card">
+        <div class="tool-header">
+          <div class="tool-num">1</div>
+          <div class="tool-name">O&O ShutUp10++</div>
+          <div class="tool-badge">⭐ Most Recommended</div>
+        </div>
+        <div class="tool-desc">
+          The most popular and trusted tool on this list. <strong>No installation required</strong> — it runs as a portable executable. The interface is clean and every setting is explained in plain language. <strong>One-click recommended settings</strong> apply the most impactful privacy changes immediately. Before making any changes, it automatically creates a System Restore Point — so you can always go back. Use <em>"Apply all recommended settings"</em> from the Actions menu as your starting point.
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-header">
+          <div class="tool-num">2</div>
+          <div class="tool-name">Chris Titus Tech's Windows Utility</div>
+          <div class="tool-badge">Comprehensive</div>
+        </div>
+        <div class="tool-desc">
+          More than a privacy tool — a complete Windows optimization suite. Runs via <strong>PowerShell</strong> (open PowerShell as Administrator, paste the launch command from the GitHub page). Disables telemetry, <strong>removes pre-installed bloatware</strong>, debloats the OS, and can apply performance tweaks. Constantly updated by a large community. One of the most powerful tools of its kind available.
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-header">
+          <div class="tool-num">3</div>
+          <div class="tool-name">WPD — Windows Privacy Dashboard</div>
+          <div class="tool-badge">Modern UI</div>
+        </div>
+        <div class="tool-desc">
+          The most visually modern of these tools. Uses <strong>Windows Privacy APIs</strong> directly, which means changes are applied cleanly. Handles telemetry, bloatware removal, and <strong>Windows Firewall rule management</strong> — blocking tracking domains at the OS firewall level. Extremely lightweight and fast.
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-header">
+          <div class="tool-num">4</div>
+          <div class="tool-name">Privatezilla / Spyzilla</div>
+          <div class="tool-badge">Open Source</div>
+        </div>
+        <div class="tool-desc">
+          Fully open source and auditable. Presents privacy settings as a clear <strong>checklist</strong> — select the options you want, click Analyze to preview changes, then Apply. Supports Windows 10 and 11. Simple, transparent, and effective. A good choice if you want to understand exactly what you're changing.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 3 — PHONES
+     ═══════════════════════════════════════════ -->
+<section id="phones" class="reveal">
+  <p class="section-tag">03 — In Your Pocket</p>
+  <h2>Your <span>Phone</span></h2>
+
+  <div class="article">
+    <p>Your smartphone is the most sophisticated surveillance device ever built — and you paid for it, you carry it everywhere, and you sleep next to it. It knows where you are at every moment, who you talk to, what you search for, what you buy, how long you look at specific content, your heart rate, your sleep patterns, and the precise microexpressions of your daily life. <strong>No intelligence agency in history has had access to data this granular about this many people.</strong></p>
+
+    <p>The business model of the smartphone industry is not selling you hardware. It is <span class="danger">selling access to you.</span> Google's entire revenue model — Search, Maps, Gmail, Android — exists to build the most detailed behavioral profile ever assembled on billions of human beings. Apple is more subtle, but its services business depends on deep integration with your digital life. Both companies comply with government data requests. Both have had security incidents. Both store data you didn't knowingly agree to share.</p>
+
+    <div class="warning-box">
+      <div class="warning-title">⚠ Warning: Android Sideloading Under Attack</div>
+      <p>There is a disturbing and escalating trend in the Android ecosystem: <strong>restrictions on APK sideloading</strong> — the ability to install apps from sources other than the official Google Play Store. This is being implemented gradually, framed as a "security measure," but its real effect is catastrophic for user freedom.</p>
+      <br>
+      <p>Sideloading is not a vulnerability. It is a <strong>fundamental right</strong> — the ability to install the software you choose on a device you own. Restricting it means Google becomes the sole gatekeeper of what software you can run. Apps that compete with Google's services, apps that protect your privacy from Google itself, open source apps, niche apps, apps from jurisdictions outside Google's comfort zone — all of them are at risk of being effectively banned from hundreds of millions of devices.</p>
+      <br>
+      <p><strong>This is a user rights violation of the highest order.</strong> Fight it. Support organizations like the Electronic Frontier Foundation, the Free Software Foundation, and the Digital Freedom Foundation. Demand that your representatives protect your right to install software on hardware you own. Make noise. This matters.</p>
+    </div>
+
+    <p>The good news is that Android — unlike iOS — remains the most customizable major mobile operating system on the planet. At its core, Android is based on Linux and is open source (AOSP — Android Open Source Project). This means that developers can take that foundation and build completely de-Googled, privacy-first operating systems on top of it. <strong>Choose Android. Then choose what runs on it.</strong></p>
+
+    <div class="big-sub">Privacy-First Mobile Operating Systems</div>
+
+    <div class="os-grid">
+      <div class="os-chip featured">
+        <div class="os-chip-name">🔒 GrapheneOS</div>
+        <div class="os-chip-desc">Zero telemetry. Maximum security. The gold standard. Pixel devices only.</div>
+      </div>
+      <div class="os-chip">
+        <div class="os-chip-name">LineageOS</div>
+        <div class="os-chip-desc">Widest device support. Community maintained. Clean Android experience.</div>
+      </div>
+      <div class="os-chip">
+        <div class="os-chip-name">crDroid</div>
+        <div class="os-chip-desc">Highly customizable. Feature-rich. Based on LineageOS.</div>
+      </div>
+      <div class="os-chip">
+        <div class="os-chip-name">CalyxOS</div>
+        <div class="os-chip-desc">Privacy-focused with microG support. Good balance of usability.</div>
+      </div>
+      <div class="os-chip">
+        <div class="os-chip-name">/e/OS</div>
+        <div class="os-chip-desc">De-Googled Android with its own app store. Beginner friendly.</div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <strong>GrapheneOS deserves special attention.</strong> It is the most security-hardened mobile OS available to the general public. Built on AOSP with extensive security enhancements: memory allocator hardening, verified boot, sandboxed Google Play (optional — run Play Store apps in complete isolation without giving Google access to your real data), network permission controls per app, sensors permission controls, and much more. If you own a Pixel device and you take your privacy seriously — <strong>this is the answer.</strong> Setup is documented extensively at grapheneos.org and the community is one of the most technically rigorous in the open source world.
+    </div>
+
+    <div class="big-sub">If You Can't Flash a New OS — Use ADB</div>
+
+    <p>Your device isn't compatible with a custom ROM. Or you're not comfortable with the flashing process. Or you simply need to keep your stock Android for work. <strong>ADB (Android Debug Bridge)</strong> is your best available option — and it is genuinely powerful.</p>
+
+    <p>ADB is a command-line tool that lets you communicate with an Android device from your computer. It is part of the Android SDK and is maintained by Google itself. With ADB, you can <strong>disable system apps and bloatware without root</strong>, remove pre-installed telemetry packages, revoke permissions from apps that shouldn't have them, disable manufacturer tracking software, and clean up carrier bloatware — all without voiding your warranty or unlocking your bootloader.</p>
+
+    <div class="callout callout-blue">
+      The impact of ADB-based debloating and permission hardening is significant. Studies have shown that aggressively removing telemetry packages and revoking network permissions from analytics-only apps can reduce background data transmission by <strong>60–80%</strong> on stock Android devices. This is not a complete solution — but combined with a privacy-respecting browser, DNS-over-HTTPS, and careful app selection, it dramatically reduces your exposure.
+    </div>
+
+    <p>ADB is available for Windows, macOS, and Linux. Enable Developer Options on your Android device (tap Build Number seven times in Settings → About Phone), enable USB Debugging, connect to your computer, and you have a command line directly into your device. The power this gives you over a device you own is remarkable — and it should make you think about why this level of control isn't available by default.</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 4 — COMPANIES
+     ═══════════════════════════════════════════ -->
+<div class="section-dark" id="companies">
+  <div class="inner reveal">
+    <p class="section-tag">04 — The Industry</p>
+    <h2>The <span>Companies</span></h2>
+
+    <div class="article">
+      <p>The tech industry will tell you that data collection is about improving your experience. This is, to put it plainly, <strong>a lie of omission so vast it constitutes deception.</strong> Data is collected because data is <em>extraordinarily valuable</em>. Not to you — to them. Your behavioral profile, your psychological triggers, your social graph, your purchasing patterns, your political leanings, your health anxieties, your relationship status — packaged, analyzed, and sold in real-time auctions that happen in the milliseconds between you clicking a link and a page loading.</p>
+
+      <div class="stat-row">
+        <div class="stat-item">
+          <div class="stat-num">$134B</div>
+          <div class="stat-label">Meta's annual revenue from your data</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">280TB+</div>
+          <div class="stat-label">Data Google processes per day</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">5,000+</div>
+          <div class="stat-label">Data points collected per person by brokers</div>
+        </div>
+      </div>
+
+      <p>Big Data is not just about advertising. It is about <strong>prediction and control.</strong> Insurance companies use data to determine your premiums. Banks use it to model your creditworthiness beyond what you've disclosed. Employers screen social media profiles. Governments purchase commercial data sets to surveil populations without a warrant. The line between private commerce and state surveillance has effectively ceased to exist.</p>
+
+      <div class="warning-box">
+        <div class="warning-title">🚨 Meta's AI Encryption Rollback — An Ongoing Crisis</div>
+        <p>Meta — the corporation that owns Facebook, Instagram, and WhatsApp — has been progressively weakening the privacy protections of its platforms under the convenient cover of <strong>"AI safety" and "AI training."</strong> This is one of the most significant and under-reported privacy crises of our time.</p>
+        <br>
+        <p>WhatsApp is used by over 2 billion people globally — not as a choice, but because network effects have made it effectively mandatory for social and professional communication in dozens of countries. It is the only way to reach certain family members, certain colleagues, certain communities. Meta knows this. <strong>And it is leveraging this captive audience to normalize the weakening of end-to-end encryption.</strong></p>
+        <br>
+        <p>The argument is always the same: "We need to scan messages to prevent child abuse / terrorism / misinformation." These are real problems. But building surveillance backdoors into encrypted communications doesn't solve them — it creates a permanent infrastructure of mass surveillance that will inevitably be abused, hacked, expanded, and ultimately turned against ordinary citizens. <strong>There is no such thing as a backdoor only the good guys can use.</strong></p>
+        <br>
+        <p>Meta's moves to use private conversations as AI training data — even with "anonymization" that has repeatedly been shown to be reversible — is not a minor policy update. It is a <span class="danger">fundamental betrayal</span> of the trust of billions of people who were promised private communication. Oppose it. Loudly.</p>
+      </div>
+
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-icon">📡</div>
+          <div class="card-title">Facebook / Instagram</div>
+          <div class="card-text">Shadow profiles on non-users. Pixel tracking across the entire web. Cross-device fingerprinting. Psychological manipulation experiments conducted on users without consent (documented, 2014). Use with extreme caution and strict privacy settings.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🔍</div>
+          <div class="card-title">Google</div>
+          <div class="card-text">Search history, location history (even when disabled), email content analysis, YouTube viewing patterns, Drive content, Chrome browsing data — a surveillance empire disguised as useful services. Every product feeds the same profile.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🎵</div>
+          <div class="card-title">TikTok</div>
+          <div class="card-text">Keylogging in the in-app browser (documented). Clipboard access. Device fingerprinting at scale. Operated by ByteDance, a company with legal obligations to the Chinese government. The threat model here is genuinely different.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🛒</div>
+          <div class="card-title">Amazon</div>
+          <div class="card-text">Alexa recordings (some reviewed by humans). Ring doorbell surveillance network. AWS hosts significant portions of the internet's data. Purchase history analyzed and shared with third parties in ways most users don't realize.</div>
+        </div>
+      </div>
+
+      <div class="big-sub">Better Alternatives Exist — Use Them</div>
+
+      <p>The most important thing to understand is this: <strong>you do not have to choose between communication and privacy.</strong> The open source and privacy community has built genuinely excellent alternatives to the surveillance tools you currently use. They are not compromises. In many cases, they are technically superior.</p>
+
+      <div class="callout callout-blue">
+        <strong>For messaging — especially with people you care about and topics that matter:</strong><br><br>
+        <strong>Signal</strong> — The gold standard of private communication. End-to-end encrypted by default. Open source. Non-profit. No ads, no data collection, no behavioral profiling. Use it.<br><br>
+        <strong>SimpleX Chat</strong> — Goes further than Signal: no user IDs at all. Not even phone numbers. Communication happens through relay servers with no link between sender and recipient identity. Ideal for high-sensitivity conversations.<br><br>
+        <strong>Delta Chat</strong> — Uses email infrastructure with Autocrypt for end-to-end encryption. Decentralized by nature — no single point of failure or control. Works with any email provider. A fascinating and underappreciated approach to private messaging.
+      </div>
+
+      <p>You cannot immediately move everyone in your life to Signal. We know. But you can start the conversation. You can use these tools with the people who matter most. You can normalize privacy as a default expectation rather than an opt-in feature for the paranoid. <strong>Privacy is not about having something to hide. It is about having something to protect.</strong></p>
+
+      <p>The choice is not between convenience and paranoia. It is between being an informed participant in your digital life and being a passive data source for companies whose interests are fundamentally opposed to yours.</p>
+
+      <div class="medium-sub">A Note on Awareness — Yusuf İpek</div>
+      <p>Much of the awareness around these issues in Turkey and the broader Turkish-speaking community has been driven by the tireless work of content creators who take the time to explain complex technical realities in accessible language. We want to specifically acknowledge <strong>Yusuf İpek</strong> for his outstanding contributions to digital literacy and privacy awareness. His ability to make these issues understandable and urgent is genuinely valuable — and this work matters. Thank you.</p>
+
+      <div class="video-label">Yusuf İpek — Instagram Düştü, Sıra WhatsApp'ta mı?</div>
+      <div class="video-wrap">
+        <iframe src="https://www.youtube.com/embed/hPhEY83533U" title="Instagram Düştü, Sıra WhatsApp'ta mı? - Teknoloji Raporu" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">Free Internet</div>
+  <div class="footer-meta">
+    <p>© 2026 <a href="https://github.com/tc4dy" target="_blank" rel="noopener">tc4dy</a> · Released under the <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener">MIT License</a></p>
+    <p style="margin-top:0.4rem;">Built with open source tools · Hosted on GitHub Pages · No tracking · No ads · No bullshit.</p>
+    <p style="margin-top:0.4rem; font-size:0.68rem; opacity:0.5;">The internet belongs to everyone. Keep it that way.</p>
+  </div>
+</footer>
+
+<script>
+  // Hamburger
+  const hamburger = document.getElementById('hamburger');
+  const navLinks = document.getElementById('navLinks');
+  hamburger.addEventListener('click', () => {
+    navLinks.classList.toggle('open');
+  });
+
+  // Close nav on link click (mobile)
+  navLinks.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => navLinks.classList.remove('open'));
+  });
+
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08 });
+  revealEls.forEach(el => observer.observe(el));
+
+  // Active nav highlight
+  const sections = document.querySelectorAll('section[id], div[id]');
+  const navAs = document.querySelectorAll('.nav-links a:not(.github-link)');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 120) current = s.id;
+    });
+    navAs.forEach(a => {
+      a.style.color = a.getAttribute('href') === '#' + current ? 'var(--accent)' : '';
+    });
+  }, { passive: true });
+</script>
+</body>
+</html>
