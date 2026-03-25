@@ -154,6 +154,68 @@
     animation: toggleGlow 0.5s ease forwards;
   }
 
+  .pdf-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: rgba(0,255,136,0.07);
+    border: 1px solid rgba(0,255,136,0.25);
+    border-radius: 6px;
+    padding: 0.35rem 0.7rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--accent);
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+    flex-shrink: 0;
+    letter-spacing: 0.03em;
+  }
+
+  .pdf-btn:hover {
+    background: rgba(0,255,136,0.14);
+    border-color: rgba(0,255,136,0.55);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(0,255,136,0.15);
+  }
+
+  .pdf-btn svg {
+    flex-shrink: 0;
+    opacity: 0.85;
+  }
+
+  .pdf-footer-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    background: rgba(0,255,136,0.07);
+    border: 1px solid rgba(0,255,136,0.25);
+    border-radius: 8px;
+    padding: 0.65rem 1.4rem;
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.1rem, 3vw, 1.7rem);
+    font-weight: 800;
+    color: var(--accent);
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.02em;
+    margin-bottom: 1.5rem;
+  }
+
+  .pdf-footer-btn:hover {
+    background: rgba(0,255,136,0.13);
+    border-color: rgba(0,255,136,0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(0,255,136,0.18);
+  }
+
+  .pdf-footer-btn svg {
+    flex-shrink: 0;
+  }
+
   .nav-links {
     display: flex;
     align-items: center;
@@ -669,6 +731,28 @@
     .nav-links.open { display: flex; }
     .nav-links a { padding: 0.75rem 1rem; font-size: 0.9rem; }
 
+    .nav-links .nav-pdf-mobile {
+      padding: 0.75rem 1rem;
+      font-size: 0.9rem;
+      color: var(--accent);
+      font-family: 'Space Mono', monospace;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border-radius: 4px;
+      transition: all 0.2s;
+      text-decoration: none;
+      background: rgba(0,255,136,0.05);
+      border: 1px solid rgba(0,255,136,0.15);
+    }
+
+    .nav-links .nav-pdf-mobile:hover {
+      background: rgba(0,255,136,0.1);
+      border-color: rgba(0,255,136,0.35);
+    }
+
+    .pdf-btn { display: none; }
+
     section { padding: 4rem 1.25rem; }
     .section-dark { padding: 4rem 1.25rem; }
     .stat-row { gap: 1.25rem; }
@@ -758,6 +842,10 @@
         </div>
       </div>
     </div>
+    <a href="guidelvm.pdf" target="_blank" rel="noopener" class="pdf-btn" id="pdfNavBtn" data-en="Starter Guide (PDF)" data-tr="Başlangıç Kılavuzu (PDF)">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      Starter Guide (PDF)
+    </a>
   </div>
   <ul class="nav-links" id="navLinks">
     <li><a href="#free-internet" data-en="Free Internet" data-tr="Özgür İnternet">Free Internet</a></li>
@@ -768,6 +856,12 @@
     <li><a href="#dns" data-en="DNS & Network" data-tr="DNS & Ağ">DNS & Network</a></li>
     <li><a href="#phones" data-en="Phones" data-tr="Telefonlar">Phones</a></li>
     <li><a href="#companies" data-en="Companies" data-tr="Şirketler">Companies</a></li>
+    <li>
+      <a href="guidelvm.pdf" target="_blank" rel="noopener" class="nav-pdf-mobile" id="pdfMobileBtn" data-en="Starter Guide (PDF)" data-tr="Başlangıç Kılavuzu (PDF)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        Starter Guide (PDF)
+      </a>
+    </li>
     <li>
       <a href="https://github.com/tc4dy" target="_blank" rel="noopener" class="github-link">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
@@ -1406,6 +1500,10 @@
   </div>
 </div>
 <footer>
+  <a href="guidelvm.pdf" target="_blank" rel="noopener" class="pdf-footer-btn" id="pdfFooterBtn" data-en="Starter Guide (PDF)" data-tr="Başlangıç Kılavuzu (PDF)">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+    Starter Guide (PDF)
+  </a>
   <div class="footer-brand">Free Internet</div>
   <div class="footer-meta">
     <p>© 2026 <a href="https://github.com/tc4dy" target="_blank" rel="noopener">tc4dy</a> · Released under the <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener">MIT License</a></p>
